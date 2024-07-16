@@ -18,6 +18,5 @@
 # vendor/
 
 # Go workspace file
-# (not) Ignoring them given that there is no need to publish the code
-# go.work
-# go.work.sum
+go.work
+go.work.sum
