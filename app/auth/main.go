@@ -1,8 +1,8 @@
 package main
 
 import (
-	"chat/internal/app/auth/env"
-	"chat/internal/app/auth/httpserver"
+	"chat/app/auth/env"
+	"chat/app/auth/httpserver"
 	"log"
 )
 

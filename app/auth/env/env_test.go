@@ -1,7 +1,7 @@
 package env
 
 import (
-	"chat/internal/pkg/test"
+	"chat/pkg/test"
 	"errors"
 	"testing"
 )

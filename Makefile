@@ -1,6 +1,6 @@
 # Variables
 local_deployment_file=./deployments/local/docker-compose.yml
-auth_app_path=internal/app/auth
+auth_app_path=app/auth
 
 # Functions
 define get_unit_tests

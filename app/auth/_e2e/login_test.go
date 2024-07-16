@@ -1,10 +1,10 @@
 package e2e
 
 import (
-	"chat/internal/app/auth/env"
-	"chat/internal/app/auth/graph/generated/e2e"
-	"chat/internal/app/auth/httpserver"
-	"chat/internal/pkg/test"
+	"chat/app/auth/env"
+	"chat/app/auth/graph/generated/e2e"
+	"chat/app/auth/httpserver"
+	"chat/pkg/test"
 	"flag"
 	"log"
 	"net/http/httptest"

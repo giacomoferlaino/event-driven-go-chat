@@ -1,8 +1,8 @@
 package httpserver
 
 import (
-	"chat/internal/app/auth/graph"
-	"chat/internal/app/auth/graph/generated"
+	"chat/app/auth/graph"
+	"chat/app/auth/graph/generated"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
