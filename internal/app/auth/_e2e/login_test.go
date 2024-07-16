@@ -16,14 +16,12 @@ var gqlClient test.GQLClient
 
 func TestMain(m *testing.M) {
 	flag.Parse()
-	if !testing.Short() {
-		env.Init()
-		router := httpserver.Router()
-		testServer = httptest.NewServer(router)
-		gqlClient = test.NewGQLClient()
-		defer testServer.Close()
-		m.Run()
-	}
+	env.Init()
+	router := httpserver.Router()
+	testServer = httptest.NewServer(router)
+	gqlClient = test.NewGQLClient(testServer.URL)
+	defer testServer.Close()
+	m.Run()
 }
 
 func TestLogin(t *testing.T) {

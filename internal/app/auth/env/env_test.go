@@ -3,16 +3,8 @@ package env
 import (
 	"chat/internal/pkg/test"
 	"errors"
-	"flag"
 	"testing"
 )
-
-func TestMain(m *testing.M) {
-	flag.Parse()
-	if testing.Short() {
-		m.Run()
-	}
-}
 
 func TestInit(t *testing.T) {
 	t.Run("if the env file is not found", func(t *testing.T) {

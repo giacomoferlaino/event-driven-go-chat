@@ -9,10 +9,7 @@ import (
 )
 
 const (
-	Schema = "http"
-	Host   = "127.0.0.1"
-	Port   = "8080"
-	Path   = "query"
+	Path = "query"
 )
 
 type GQLClient struct {
@@ -20,8 +17,8 @@ type GQLClient struct {
 	Client graphql.Client
 }
 
-func NewGQLClient() GQLClient {
-	url := fmt.Sprintf("%s://%s:%s/%s", Schema, Host, Port, Path)
+func NewGQLClient(baseUrl string) GQLClient {
+	url := fmt.Sprintf("%s/%s", baseUrl, Path)
 	client := graphql.NewClient(url, http.DefaultClient)
 	return GQLClient{
 		Ctx:    context.Background(),
