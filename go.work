@@ -1,0 +1,8 @@
+go 1.22.5
+
+use (
+	.
+	./internal/app/auth
+	./internal/app/chat
+	./internal/pkg/test
+)
