@@ -1,9 +1,9 @@
 package e2e
 
 import (
-	"chat/app/auth/env"
 	"chat/app/auth/graph/generated/e2e"
 	"chat/app/auth/httpserver"
+	"chat/pkg/env"
 	"chat/pkg/test"
 	"flag"
 	"log"
