@@ -7,6 +7,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
+const defaultPort = "8080"
+
 var (
 	godotenvLoad = godotenv.Load
 	osGetenv     = os.Getenv
@@ -21,4 +23,12 @@ func Init() error {
 	GIN_MODE := osGetenv("GIN_MODE")
 	ginSetMode(GIN_MODE)
 	return nil
+}
+
+func Port() string {
+	port := osGetenv("PORT")
+	if port == "" {
+		return defaultPort
+	}
+	return port
 }

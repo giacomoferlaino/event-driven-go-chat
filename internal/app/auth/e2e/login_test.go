@@ -2,45 +2,44 @@ package e2e
 
 import (
 	"chat/internal/app/auth/env"
+	"chat/internal/app/auth/graph/generated/e2e"
 	"chat/internal/app/auth/httpserver"
-	"chat/internal/app/auth/login"
 	"chat/internal/pkg/test"
 	"flag"
-	"io"
 	"log"
-	"net/http"
 	"net/http/httptest"
 	"testing"
-
-	"github.com/gin-gonic/gin"
 )
 
 var testServer *httptest.Server
+var gqlClient test.GQLClient
 
 func TestMain(m *testing.M) {
 	flag.Parse()
 	if !testing.Short() {
 		env.Init()
-		router := httpserver.GetRouter()
+		router := httpserver.Router()
 		testServer = httptest.NewServer(router)
+		gqlClient = test.NewGQLClient()
 		defer testServer.Close()
 		m.Run()
 	}
 }
 
 func TestLogin(t *testing.T) {
-	reqUrl := testServer.URL + login.Path
-	res, err := http.Post(reqUrl, gin.MIMEJSON, nil)
+	input := e2e.UserCredentials{
+		Username: "example@email.co",
+		Password: "password",
+	}
+	res, err := e2e.Login(gqlClient.Ctx, gqlClient.Client, input)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	body, err := io.ReadAll(res.Body)
-	res.Body.Close()
-	if err != nil {
-		log.Fatalln(err)
+	want := e2e.LoginLoginUser{
+		FirstName: "James",
+		LastName:  "Bond",
 	}
-
-	test.AssertEqual(res.StatusCode, http.StatusOK, t)
-	test.AssertEqual("Logged in", string(body), t)
+	got := res.GetLogin()
+	test.AssertEqual(want, got, t)
 }

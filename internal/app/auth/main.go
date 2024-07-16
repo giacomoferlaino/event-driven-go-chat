@@ -12,7 +12,9 @@ func main() {
 		log.Fatalln("Error initializing environment:", err)
 	}
 
-	router := httpserver.GetRouter()
-	err = router.Run()
+	router := httpserver.Router()
+
+	port := env.Port()
+	err = router.Run(":" + port)
 	log.Fatalf("Error starting HTTP server:\n%s", err)
 }
