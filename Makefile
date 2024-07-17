@@ -21,6 +21,7 @@ e2e-restart: e2e-down e2e-up
 codegen: auth-codegen
 
 test-unit: auth-test-unit
+	go test ./pkg/...
 
 test-e2e: auth-test-e2e
 
