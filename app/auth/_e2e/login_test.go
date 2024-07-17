@@ -4,6 +4,7 @@ import (
 	"chat/app/auth/graph/generated/e2e"
 	"chat/app/auth/httpserver"
 	"chat/pkg/env"
+	"chat/pkg/keycloak/keycloacktest"
 	"chat/pkg/test"
 	"flag"
 	"log"
@@ -21,6 +22,17 @@ func TestMain(m *testing.M) {
 	testServer = httptest.NewServer(router)
 	gqlClient = test.NewGQLClient(testServer.URL)
 	defer testServer.Close()
+
+	kcTest, err := keycloacktest.New()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	err = kcTest.Setup()
+	defer kcTest.Teardown()
+	if err != nil {
+		log.Panicln(err)
+	}
 	m.Run()
 }
 
