@@ -1,5 +1,6 @@
 # Variables
 local_deployment_file=./deployments/local/docker-compose.yml
+e2e_deployment_file=./deployments/e2e/docker-compose.yml
 auth_app_path=app/auth
 
 # Functions
@@ -13,6 +14,12 @@ local-up: $(local_deployment_file)
 
 local-down: $(local_deployment_file)
 	docker compose -f $(local_deployment_file) down
+
+e2e-up: $(e2e_deployment_file)
+	docker compose -f $(e2e_deployment_file) up -d
+
+e2e-down: $(e2e_deployment_file)
+	docker compose -f $(e2e_deployment_file) down
 
 codegen: auth-codegen
 
