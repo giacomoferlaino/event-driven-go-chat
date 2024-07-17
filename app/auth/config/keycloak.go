@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"time"
 
 	"github.com/Nerzal/gocloak/v13"
 )
@@ -13,9 +14,11 @@ func KcUrl() string {
 func KcRealm() gocloak.RealmRepresentation {
 	id := os.Getenv("KC_CHAT_REALM_ID")
 	enabled := true
+	accessTokenLifespan := int(time.Minute / time.Second * 20)
 	return gocloak.RealmRepresentation{
-		Realm:   &id,
-		Enabled: &enabled,
+		Realm:               &id,
+		Enabled:             &enabled,
+		AccessTokenLifespan: &accessTokenLifespan,
 	}
 }
 
