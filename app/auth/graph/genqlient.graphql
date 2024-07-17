@@ -1,6 +1,5 @@
 mutation Login($input: UserCredentials!) {
   login(input: $input) {
-    firstName
-    lastName
+    accessToken
   }
 }

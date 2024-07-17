@@ -8,18 +8,17 @@ import (
 
 func TestLogin(t *testing.T) {
 	input := e2e.UserCredentials{
-		Username: "example@email.co",
-		Password: "password",
+		Username: *chatUser().KCUser.Username,
+		Password: *chatUser().Password,
 	}
-	res, err := e2e.Login(testEnv.GQLClient.Ctx, testEnv.GQLClient.Client, input)
+	res, err := e2e.Login(e2eEnv.GQLClient.Ctx, e2eEnv.GQLClient.Client, input)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	want := e2e.LoginLoginUser{
-		FirstName: "James",
-		LastName:  "Bond",
+	want := e2e.LoginLoginJWT{
+		AccessToken: "",
 	}
 	got := res.GetLogin()
-	test.AssertEqual(want, got, t)
+	test.AssertNotEqual(want, got, t)
 }

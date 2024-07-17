@@ -1,26 +1,41 @@
 package e2e
 
 import (
+	"chat/app/auth/_e2e/e2esdk"
+	"chat/app/auth/config"
+	"chat/app/auth/graph"
 	"chat/pkg/env"
-	"chat/pkg/test"
 	"flag"
 	"log"
 	"testing"
 )
 
-var testEnv *test.Env
+var e2eEnv *e2esdk.Env
 
 func TestMain(m *testing.M) {
 	flag.Parse()
-	env.Init()
-	var err error
-	testEnv, err = test.NewEnv()
+	err := env.Init("../.env")
 	if err != nil {
 		log.Panicln(err)
 	}
 
-	err = testEnv.Setup()
-	defer testEnv.Teardown()
+	config := e2esdk.Config{
+		Router: graph.Router(),
+		KeycloakData: e2esdk.KeycloakData{
+			Realm:   realm(),
+			Clients: clients(),
+			Users:   users(),
+		},
+		KeycloakUrl: config.KcUrl(),
+	}
+
+	e2eEnv, err = e2esdk.NewEnv(config)
+	if err != nil {
+		log.Panicln(err)
+	}
+
+	err = e2eEnv.Setup()
+	defer e2eEnv.Teardown()
 	if err != nil {
 		log.Panicln(err)
 	}

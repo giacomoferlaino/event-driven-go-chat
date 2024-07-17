@@ -13,7 +13,7 @@ func TestInit(t *testing.T) {
 				return errors.New("Env file not found")
 			})()
 
-			err := Init()
+			err := Init("")
 
 			test.AssertNotEqual(err, nil, t)
 		})
@@ -30,7 +30,7 @@ func TestInit(t *testing.T) {
 
 		defer test.Stub(&ginSetMode, func(value string) {})()
 
-		err := Init()
+		err := Init("")
 
 		test.AssertEqual(err, nil, t)
 	})

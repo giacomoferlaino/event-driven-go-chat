@@ -5,8 +5,14 @@
 
 
 type User {
-  firstName: String!
-  lastName: String!
+  ID: String!
+  firstName: String
+  lastName: String
+  email: String
+}
+
+type JWT {
+  accessToken: String!
 }
 
 type Query {
@@ -19,5 +25,5 @@ input UserCredentials {
 }
 
 type Mutation {
-  login(input: UserCredentials!): User!
+  login(input: UserCredentials!): JWT!
 }

@@ -15,8 +15,8 @@ var (
 	ginSetMode   = gin.SetMode
 )
 
-func Init() error {
-	err := godotenvLoad(".env")
+func Init(filePath string) error {
+	err := godotenvLoad(filePath)
 	if err != nil {
 		return err
 	}

@@ -1,18 +1,18 @@
 package main
 
 import (
-	"chat/app/auth/httpserver"
+	"chat/app/auth/graph"
 	"chat/pkg/env"
 	"log"
 )
 
 func main() {
-	err := env.Init()
+	err := env.Init(".env")
 	if err != nil {
 		log.Fatalln("Error initializing environment:", err)
 	}
 
-	router := httpserver.Router()
+	router := graph.Router()
 
 	port := env.Port()
 	err = router.Run(":" + port)

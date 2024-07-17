@@ -1,8 +1,6 @@
-package test
+package e2esdk
 
 import (
-	"chat/app/auth/httpserver"
-	"chat/pkg/keycloak/keycloacktest"
 	"net/http/httptest"
 
 	"github.com/gin-gonic/gin"
@@ -12,20 +10,19 @@ type Env struct {
 	Router     *gin.Engine
 	TestServer *httptest.Server
 	GQLClient  *GQLClient
-	Keycloak   *keycloacktest.KeycloakTest
+	Keycloak   *Keycloak
 }
 
-func NewEnv() (*Env, error) {
-	router := httpserver.Router()
-	testServer := httptest.NewServer(router)
+func NewEnv(config Config) (*Env, error) {
+	testServer := httptest.NewServer(config.Router)
 	gqlClient := NewGQLClient(testServer.URL)
-	keycloack, err := keycloacktest.New()
+	keycloack, err := NewKeycloak(config.KeycloakUrl, config.KeycloakData)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Env{
-		Router:     router,
+		Router:     config.Router,
 		TestServer: testServer,
 		GQLClient:  gqlClient,
 		Keycloak:   keycloack,

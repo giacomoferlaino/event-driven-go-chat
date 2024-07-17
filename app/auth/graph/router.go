@@ -1,7 +1,6 @@
-package httpserver
+package graph
 
 import (
-	"chat/app/auth/graph"
 	"chat/app/auth/graph/generated"
 
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -10,7 +9,10 @@ import (
 )
 
 func graphHandler() gin.HandlerFunc {
-	handler := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{}}))
+	rootResolver := &Resolver{
+		diContainer: newDIContainer(),
+	}
+	handler := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: rootResolver}))
 
 	return func(c *gin.Context) {
 		handler.ServeHTTP(c.Writer, c.Request)
