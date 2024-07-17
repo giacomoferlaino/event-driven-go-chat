@@ -17,10 +17,10 @@ type GQLClient struct {
 	Client graphql.Client
 }
 
-func NewGQLClient(baseUrl string) GQLClient {
+func NewGQLClient(baseUrl string) *GQLClient {
 	url := fmt.Sprintf("%s/%s", baseUrl, Path)
 	client := graphql.NewClient(url, http.DefaultClient)
-	return GQLClient{
+	return &GQLClient{
 		Ctx:    context.Background(),
 		Client: client,
 	}
