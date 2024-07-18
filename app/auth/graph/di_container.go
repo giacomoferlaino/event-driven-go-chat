@@ -10,7 +10,7 @@ var ()
 
 type diContainer struct {
 	keycloakRepository repository.Keycloak
-	keycloakService    service.KeycloakAuth
+	keycloakService    service.Keycloak
 }
 
 func newDIContainer() diContainer {
