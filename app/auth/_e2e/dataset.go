@@ -20,7 +20,7 @@ func chatUser() domain.User {
 	enabled := true
 	emailVerified := true
 	return domain.User{
-		KCUser: gocloak.User{
+		User: gocloak.User{
 			Username:      &username,
 			Enabled:       &enabled,
 			Email:         &email,

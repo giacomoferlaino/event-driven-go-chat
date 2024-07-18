@@ -89,7 +89,7 @@ func (k *Keycloak) createClients() error {
 
 func (k *Keycloak) createUsers() error {
 	for _, user := range k.SeedData.Users {
-		userID, err := k.Client.CreateUser(k.Ctx, k.Token.AccessToken, *k.SeedData.Realm.Realm, user.KCUser)
+		userID, err := k.Client.CreateUser(k.Ctx, k.Token.AccessToken, *k.SeedData.Realm.Realm, user.User)
 		if err != nil {
 			return err
 		}
