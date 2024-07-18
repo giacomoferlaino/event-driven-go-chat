@@ -2,16 +2,16 @@ package service
 
 import "chat/app/auth/repository"
 
-func NewKeycloak(keycloakRepository repository.Keycloak) KeycloakAuth {
+func NewKeycloak(IdentityProviderRepository repository.IdentityProvider) KeycloakAuth {
 	return KeycloakAuth{
-		keycloakRepository: keycloakRepository,
+		IdentityProviderRepository: IdentityProviderRepository,
 	}
 }
 
 type KeycloakAuth struct {
-	keycloakRepository repository.Keycloak
+	IdentityProviderRepository repository.IdentityProvider
 }
 
-func (k KeycloakAuth) Login(username string, password string) (string, error) {
-	return k.keycloakRepository.GetAccessToken(username, password)
+func (k KeycloakAuth) Login(username string, password string) (accessToken string, err error) {
+	return k.IdentityProviderRepository.GetAccessToken(username, password)
 }
