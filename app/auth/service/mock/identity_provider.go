@@ -1,20 +1,23 @@
 package mock
 
-type GetAccessTokenReturn struct {
-	Val string
-	Err error
-}
+import (
+	"chat/pkg/test"
+	"errors"
+)
 
 func NewIdentityProvider() IdentityProvider {
 	return IdentityProvider{
-		GetAccessTokenReturn: &GetAccessTokenReturn{},
+		GetAccessTokenReturn: &test.ReturnTuple[string, error]{
+			Val1: "",
+			Val2: errors.New(""),
+		},
 	}
 }
 
 type IdentityProvider struct {
-	GetAccessTokenReturn *GetAccessTokenReturn
+	GetAccessTokenReturn *test.ReturnTuple[string, error]
 }
 
 func (i IdentityProvider) GetAccessToken(username string, password string) (string, error) {
-	return i.GetAccessTokenReturn.Val, i.GetAccessTokenReturn.Err
+	return i.GetAccessTokenReturn.Val1, i.GetAccessTokenReturn.Val2
 }

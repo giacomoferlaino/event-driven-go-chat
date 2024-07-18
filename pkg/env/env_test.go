@@ -43,23 +43,18 @@ func TestPort(t *testing.T) {
 				return ""
 			})()
 
-			want := defaultPort
-			got := Port()
-
-			test.AssertEqual(want, got, t)
+			test.AssertEqual(defaultPort, Port(), t)
 		})
 	})
 
 	t.Run("if the PORT environment variable is set", func(t *testing.T) {
 		t.Run("it should return the environment variable value", func(t *testing.T) {
-			want := "9090"
+			port := "9090"
 			defer test.Stub(&osGetenv, func(key string) string {
-				return want
+				return port
 			})()
 
-			got := Port()
-
-			test.AssertEqual(want, got, t)
+			test.AssertEqual(port, Port(), t)
 		})
 	})
 }

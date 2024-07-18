@@ -19,7 +19,7 @@ func NewKeycloak(basePath string, realm string) Keycloak {
 }
 
 type Keycloak struct {
-	client        *gocloak.GoCloak
+	client        KeycloakClient
 	ctx           context.Context
 	realm         string
 	clientAccount gocloak.Client
