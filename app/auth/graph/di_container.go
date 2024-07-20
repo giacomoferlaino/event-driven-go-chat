@@ -6,8 +6,6 @@ import (
 	"chat/app/auth/service"
 )
 
-var ()
-
 type diContainer struct {
 	keycloakRepository repository.Keycloak
 	keycloakService    service.Keycloak
