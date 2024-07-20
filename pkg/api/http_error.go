@@ -1,9 +1,12 @@
 package api
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+)
 
-func NewHTTPError(message string, statusCode uint, rootError error) HttpError {
-	return HttpError{
+func NewHTTPError(message string, statusCode int, rootError error) *HttpError {
+	return &HttpError{
 		Message:    message,
 		StatusCode: statusCode,
 		RootError:  rootError,
@@ -13,11 +16,11 @@ func NewHTTPError(message string, statusCode uint, rootError error) HttpError {
 type HttpError struct {
 	Message    string
 	RootError  error
-	StatusCode uint
+	StatusCode int
 }
 
 func (h HttpError) Error() string {
-	return h.Message
+	return fmt.Errorf("http_error %d: %w", h.StatusCode, h.RootError).Error()
 }
 
 func NewInternalServerError(rootError error) HttpError {

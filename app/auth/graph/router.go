@@ -5,6 +5,7 @@ import (
 	"chat/pkg/api"
 	"context"
 	"errors"
+	"log"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -18,11 +19,12 @@ func errorPresenter(ctx context.Context, e error) *gqlerror.Error {
 
 	var httpErr *api.HttpError
 	if errors.As(e, &httpErr) {
-		err.Message = e.Error()
+		err.Message = httpErr.Message
 	} else {
 		err.Message = api.NewInternalServerError(nil).Message
 	}
 
+	log.Println(e.Error())
 	return err
 }
 
