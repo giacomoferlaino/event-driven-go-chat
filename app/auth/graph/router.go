@@ -14,8 +14,12 @@ import (
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
+var (
+	graphqlDefaultErrorPresenter = graphql.DefaultErrorPresenter
+)
+
 func errorPresenter(ctx context.Context, e error) *gqlerror.Error {
-	err := graphql.DefaultErrorPresenter(ctx, e)
+	err := graphqlDefaultErrorPresenter(ctx, e)
 
 	var httpErr *api.HttpError
 	if errors.As(e, &httpErr) {
