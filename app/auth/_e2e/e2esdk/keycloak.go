@@ -1,7 +1,6 @@
 package e2esdk
 
 import (
-	"chat/app/auth/domain"
 	"context"
 	"log"
 
@@ -15,32 +14,34 @@ const (
 )
 
 type KeycloakData struct {
-	Realm   gocloak.RealmRepresentation
-	Clients []gocloak.Client
-	Users   []domain.User
+	Realm  gocloak.RealmRepresentation
+	Client gocloak.Client
+	Users  []User
 }
 
 func NewKeycloak(baseUrl string, seedData KeycloakData) (*Keycloak, error) {
 	client := gocloak.NewClient(baseUrl)
 	ctx := context.Background()
-	token, err := client.LoginAdmin(ctx, adminUser, adminPass, defaultReamID)
+	adminJWT, err := client.LoginAdmin(ctx, adminUser, adminPass, defaultReamID)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Keycloak{
-		Client:   client,
-		Token:    token,
-		Ctx:      context.Background(),
-		SeedData: seedData,
+		Client:    client,
+		AdminJWT:  adminJWT,
+		Ctx:       context.Background(),
+		SeedData:  seedData,
+		UsersJWTs: NewJWTs(),
 	}, nil
 }
 
 type Keycloak struct {
-	Token    *gocloak.JWT
-	Client   *gocloak.GoCloak
-	Ctx      context.Context
-	SeedData KeycloakData
+	AdminJWT  *gocloak.JWT
+	Client    *gocloak.GoCloak
+	Ctx       context.Context
+	SeedData  KeycloakData
+	UsersJWTs *JWTs
 }
 
 func (k *Keycloak) Setup() error {
@@ -59,6 +60,11 @@ func (k *Keycloak) Setup() error {
 		return err
 	}
 
+	err = k.generateJWTs()
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -70,7 +76,7 @@ func (k *Keycloak) Teardown() {
 }
 
 func (k *Keycloak) createRealms() error {
-	_, err := k.Client.CreateRealm(k.Ctx, k.Token.AccessToken, k.SeedData.Realm)
+	_, err := k.Client.CreateRealm(k.Ctx, k.AdminJWT.AccessToken, k.SeedData.Realm)
 	if err != nil {
 		return err
 	}
@@ -78,22 +84,21 @@ func (k *Keycloak) createRealms() error {
 }
 
 func (k *Keycloak) createClients() error {
-	for _, client := range k.SeedData.Clients {
-		_, err := k.Client.CreateClient(k.Ctx, k.Token.AccessToken, *k.SeedData.Realm.Realm, client)
-		if err != nil {
-			return err
-		}
+	_, err := k.Client.CreateClient(k.Ctx, k.AdminJWT.AccessToken, *k.SeedData.Realm.Realm, k.SeedData.Client)
+	if err != nil {
+		return err
 	}
+
 	return nil
 }
 
 func (k *Keycloak) createUsers() error {
 	for _, user := range k.SeedData.Users {
-		userID, err := k.Client.CreateUser(k.Ctx, k.Token.AccessToken, *k.SeedData.Realm.Realm, user.User)
+		userID, err := k.Client.CreateUser(k.Ctx, k.AdminJWT.AccessToken, *k.SeedData.Realm.Realm, user.User)
 		if err != nil {
 			return err
 		}
-		err = k.Client.SetPassword(k.Ctx, k.Token.AccessToken, userID, *k.SeedData.Realm.Realm, *user.Password, false)
+		err = k.Client.SetPassword(k.Ctx, k.AdminJWT.AccessToken, userID, *k.SeedData.Realm.Realm, *user.Password, false)
 		if err != nil {
 			return err
 		}
@@ -101,8 +106,26 @@ func (k *Keycloak) createUsers() error {
 	return nil
 }
 
+func (k *Keycloak) generateJWTs() error {
+	for _, user := range k.SeedData.Users {
+		jwt, err := k.Client.Login(
+			k.Ctx,
+			*k.SeedData.Client.ClientID,
+			*k.SeedData.Client.Secret,
+			*k.SeedData.Realm.Realm,
+			*user.Username,
+			*user.Password,
+		)
+		if err != nil {
+			return err
+		}
+		k.UsersJWTs.Add(*user.Username, *jwt)
+	}
+	return nil
+}
+
 func (k *Keycloak) deleteRealms() error {
-	err := k.Client.DeleteRealm(k.Ctx, k.Token.AccessToken, *k.SeedData.Realm.Realm)
+	err := k.Client.DeleteRealm(k.Ctx, k.AdminJWT.AccessToken, *k.SeedData.Realm.Realm)
 	if err != nil {
 		return err
 	}

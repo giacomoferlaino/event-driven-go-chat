@@ -1,4 +1,4 @@
-package domain
+package e2esdk
 
 import "github.com/Nerzal/gocloak/v13"
 

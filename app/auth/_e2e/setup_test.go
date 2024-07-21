@@ -22,9 +22,9 @@ func TestMain(m *testing.M) {
 	config := e2esdk.Config{
 		Router: graph.Router(),
 		KeycloakData: e2esdk.KeycloakData{
-			Realm:   realm(),
-			Clients: clients(),
-			Users:   users(),
+			Realm:  realm(),
+			Client: client(),
+			Users:  users(),
 		},
 		KeycloakUrl: config.KcUrl(),
 	}

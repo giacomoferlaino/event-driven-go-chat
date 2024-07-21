@@ -1,8 +1,8 @@
 package e2e
 
 import (
+	"chat/app/auth/_e2e/e2esdk"
 	"chat/app/auth/config"
-	"chat/app/auth/domain"
 
 	"github.com/Nerzal/gocloak/v13"
 )
@@ -11,7 +11,7 @@ func realm() gocloak.RealmRepresentation {
 	return config.KcRealm()
 }
 
-func chatUser() domain.User {
+func chatUser() e2esdk.User {
 	username := "tester"
 	password := "password"
 	email := "test@email.com"
@@ -19,7 +19,7 @@ func chatUser() domain.User {
 	lastName := "tester"
 	enabled := true
 	emailVerified := true
-	return domain.User{
+	return e2esdk.User{
 		User: gocloak.User{
 			Username:      &username,
 			Enabled:       &enabled,
@@ -32,14 +32,12 @@ func chatUser() domain.User {
 	}
 }
 
-func users() []domain.User {
-	return []domain.User{
+func users() []e2esdk.User {
+	return []e2esdk.User{
 		chatUser(),
 	}
 }
 
-func clients() []gocloak.Client {
-	return []gocloak.Client{
-		config.KcClient(),
-	}
+func client() gocloak.Client {
+	return config.KcClient()
 }
