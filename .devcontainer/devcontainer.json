@@ -24,7 +24,8 @@
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"ms-vscode.makefile-tools"
+				"ms-vscode.makefile-tools",
+				"streetsidesoftware.code-spell-checker"
 			]
 		}
 	}
