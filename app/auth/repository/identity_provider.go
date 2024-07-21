@@ -1,5 +1,7 @@
 package repository
 
+import "chat/app/auth/domain"
+
 type IdentityProvider interface {
-	GetAccessToken(username string, password string) (string, error)
+	GetJWT(username string, password string) (domain.JWT, error)
 }

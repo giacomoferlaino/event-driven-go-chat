@@ -2,6 +2,7 @@ package repository
 
 import (
 	"chat/app/auth/config"
+	"chat/app/auth/domain"
 	"chat/app/auth/repository/mock"
 	"chat/pkg/test"
 	"context"
@@ -11,7 +12,7 @@ import (
 	"github.com/Nerzal/gocloak/v13"
 )
 
-func TestGetAccessToken(t *testing.T) {
+func TestGetJWT(t *testing.T) {
 	keycloakClient := mock.NewKeycloackClientMock()
 	keycloakRepository := Keycloak{
 		client:        keycloakClient,
@@ -28,9 +29,9 @@ func TestGetAccessToken(t *testing.T) {
 			}
 			defer test.Stub(keycloakClient.LoginReturn, mockedReturn)()
 
-			accessToken, err := keycloakRepository.GetAccessToken("username", "password")
+			jwt, err := keycloakRepository.GetJWT("username", "password")
 
-			test.AssertEqual("", accessToken, t)
+			test.AssertEqual(domain.JWT{}, jwt, t)
 			test.AssertEqual(mockedReturn.Val2, err, t)
 		})
 	})
@@ -38,14 +39,18 @@ func TestGetAccessToken(t *testing.T) {
 	t.Run("if the login return teh JWT", func(t *testing.T) {
 		t.Run("it should return the JWT access token", func(t *testing.T) {
 			mockedReturn := test.ReturnTuple[*gocloak.JWT, error]{
-				Val1: &gocloak.JWT{AccessToken: "access_token"},
+				Val1: &gocloak.JWT{AccessToken: "access_token", RefreshToken: "refresh_token"},
 				Val2: nil,
 			}
 			defer test.Stub(keycloakClient.LoginReturn, mockedReturn)()
 
-			accessToken, err := keycloakRepository.GetAccessToken("username", "password")
+			jwt, err := keycloakRepository.GetJWT("username", "password")
 
-			test.AssertEqual(mockedReturn.Val1.AccessToken, accessToken, t)
+			want := domain.JWT{
+				AccessToken:  mockedReturn.Val1.AccessToken,
+				RefreshToken: mockedReturn.Val1.RefreshToken,
+			}
+			test.AssertEqual(want, jwt, t)
 			test.AssertEqual(nil, err, t)
 		})
 	})

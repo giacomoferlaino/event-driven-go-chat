@@ -3,6 +3,7 @@ package repository
 import (
 	"chat/app/auth/autherror"
 	"chat/app/auth/config"
+	"chat/app/auth/domain"
 	"context"
 	"errors"
 	"net/http"
@@ -28,19 +29,23 @@ type Keycloak struct {
 	clientAccount gocloak.Client
 }
 
-func (k Keycloak) GetAccessToken(username string, password string) (string, error) {
-	jwt, err := k.client.Login(k.ctx, *k.clientAccount.ClientID, *k.clientAccount.Secret, k.realm, username, password)
+func (k Keycloak) GetJWT(username string, password string) (domain.JWT, error) {
+	gkJWT, err := k.client.Login(k.ctx, *k.clientAccount.ClientID, *k.clientAccount.Secret, k.realm, username, password)
 
 	if err != nil {
 		var gkError *gocloak.APIError
 		if errors.As(err, &gkError) {
 			if gkError.Code == http.StatusUnauthorized {
-				return "", autherror.NewInvalidCredentials(*gkError)
+				return domain.JWT{}, autherror.NewInvalidCredentials(*gkError)
 			}
 		}
 
-		return "", err
+		return domain.JWT{}, err
 	}
 
-	return jwt.AccessToken, nil
+	jwt := domain.JWT{
+		AccessToken:  gkJWT.AccessToken,
+		RefreshToken: gkJWT.RefreshToken,
+	}
+	return jwt, nil
 }

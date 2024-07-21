@@ -12,15 +12,16 @@ import (
 
 // Login is the resolver for the login field.
 func (r *mutationResolver) Login(ctx context.Context, input generated.UserCredentials) (*generated.Jwt, error) {
-	accessToken, err := r.diContainer.keycloakService.Login(input.Username, input.Password)
+	jwt, err := r.diContainer.keycloakService.Login(input.Username, input.Password)
 	if err != nil {
 		return nil, err
 	}
 
-	jwt := generated.Jwt{
-		AccessToken: accessToken,
+	gqlJWT := generated.Jwt{
+		AccessToken:  jwt.AccessToken,
+		RefreshToken: jwt.RefreshToken,
 	}
-	return &jwt, nil
+	return &gqlJWT, nil
 }
 
 // Foo is the resolver for the foo field.

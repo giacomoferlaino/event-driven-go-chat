@@ -18,16 +18,14 @@ func TestLogin(t *testing.T) {
 			}
 			res, err := e2e.Login(e2eEnv.GQLClient.Ctx, e2eEnv.GQLClient.Client, input)
 
-			want := e2e.LoginLoginJWT{
-				AccessToken: "",
-			}
 			got := res.GetLogin()
-			test.AssertNotEqual(want, got, t)
+			test.AssertNotEqual("", got.AccessToken, t)
+			test.AssertNotEqual("", got.RefreshToken, t)
 			test.AssertEqual(nil, err, t)
 		})
 	})
 
-	t.Run("if the credetntials are not valid", func(t *testing.T) {
+	t.Run("if the credentials are not valid", func(t *testing.T) {
 		t.Run("it should return an error", func(t *testing.T) {
 			input := e2e.UserCredentials{
 				Username: "invalid_user",
@@ -39,9 +37,7 @@ func TestLogin(t *testing.T) {
 				t.Errorf("The returned error type is not gqlerror.Error")
 			}
 
-			want := e2e.LoginLoginJWT{
-				AccessToken: "",
-			}
+			want := e2e.LoginLoginJWT{}
 			got := res.GetLogin()
 			test.AssertEqual(want, got, t)
 			test.AssertEqual("invalid_credentials", gqlError.Message, t)
