@@ -5,6 +5,6 @@ import (
 	"net/http"
 )
 
-func NewInvalidCredentials(rootError error) *api.HttpError {
-	return api.NewHTTPError("invalid_credentials", http.StatusUnauthorized, rootError)
+func NewInvalidCredentials(err error) *api.HttpError {
+	return api.NewHTTPError("invalid_credentials", http.StatusUnauthorized, err)
 }

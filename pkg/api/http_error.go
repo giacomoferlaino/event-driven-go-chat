@@ -5,28 +5,28 @@ import (
 	"net/http"
 )
 
-func NewHTTPError(message string, statusCode int, rootError error) *HttpError {
+func NewHTTPError(message string, statusCode int, err error) *HttpError {
 	return &HttpError{
 		Message:    message,
 		StatusCode: statusCode,
-		RootError:  rootError,
+		Err:        err,
 	}
 }
 
 type HttpError struct {
 	Message    string
-	RootError  error
+	Err        error
 	StatusCode int
 }
 
 func (h HttpError) Error() string {
-	return fmt.Errorf("http_error %d: %w", h.StatusCode, h.RootError).Error()
+	return fmt.Errorf("http_error %d: %w", h.StatusCode, h.Err).Error()
 }
 
-func NewInternalServerError(rootError error) HttpError {
+func NewInternalServerError(err error) HttpError {
 	return HttpError{
 		Message:    "internal_server_error",
 		StatusCode: http.StatusInternalServerError,
-		RootError:  rootError,
+		Err:        err,
 	}
 }
