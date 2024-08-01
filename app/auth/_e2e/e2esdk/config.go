@@ -4,6 +4,6 @@ import "github.com/gin-gonic/gin"
 
 type Config struct {
 	Router       *gin.Engine
-	KeycloakData KeycloakData
+	KeycloakData *KeycloakData
 	KeycloakUrl  string
 }

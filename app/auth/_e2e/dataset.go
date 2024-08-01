@@ -7,11 +7,30 @@ import (
 	"github.com/Nerzal/gocloak/v13"
 )
 
-func realm() gocloak.RealmRepresentation {
-	return config.KcRealm()
+func realm() *e2esdk.Realm {
+	return &e2esdk.Realm{
+		Roles:               &[]gocloak.Role{*chatRealmRole()},
+		RealmRepresentation: config.KcRealm(),
+	}
 }
 
-func chatUser() e2esdk.User {
+func chatRealmRole() *gocloak.Role {
+	name := "chat-role"
+	description := "${role_chat-role}"
+	return &gocloak.Role{
+		Name:        &name,
+		Description: &description,
+	}
+
+}
+
+func realmRoles() *[]gocloak.Role {
+	return &[]gocloak.Role{
+		*chatRealmRole(),
+	}
+}
+
+func chatUser() *e2esdk.User {
 	username := "tester"
 	password := "password"
 	email := "test@email.com"
@@ -19,7 +38,10 @@ func chatUser() e2esdk.User {
 	lastName := "tester"
 	enabled := true
 	emailVerified := true
-	return e2esdk.User{
+	realmRoles := []string{
+		*chatRealmRole().Name,
+	}
+	return &e2esdk.User{
 		User: gocloak.User{
 			Username:      &username,
 			Enabled:       &enabled,
@@ -27,17 +49,22 @@ func chatUser() e2esdk.User {
 			EmailVerified: &emailVerified,
 			FirstName:     &firstName,
 			LastName:      &lastName,
+			RealmRoles:    &realmRoles,
 		},
-		Password: &password,
+		Password:  &password,
+		RealmName: realm().Realm,
 	}
 }
 
-func users() []e2esdk.User {
-	return []e2esdk.User{
+func users() *[]*e2esdk.User {
+	return &[]*e2esdk.User{
 		chatUser(),
 	}
 }
 
-func client() gocloak.Client {
-	return config.KcClient()
+func client() *e2esdk.Client {
+	return &e2esdk.Client{
+		Client:    config.KcClient(),
+		RealmName: realm().Realm,
+	}
 }

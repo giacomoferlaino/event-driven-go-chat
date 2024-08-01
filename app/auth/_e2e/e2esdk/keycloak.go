@@ -14,12 +14,12 @@ const (
 )
 
 type KeycloakData struct {
-	Realm  gocloak.RealmRepresentation
-	Client gocloak.Client
-	Users  []User
+	Realm  *Realm
+	Client *Client
+	Users  *[]*User
 }
 
-func NewKeycloak(baseUrl string, seedData KeycloakData) (*Keycloak, error) {
+func NewKeycloak(baseUrl string, seedData *KeycloakData) (*Keycloak, error) {
 	client := gocloak.NewClient(baseUrl)
 	ctx := context.Background()
 	adminJWT, err := client.LoginAdmin(ctx, adminUser, adminPass, defaultReamID)
@@ -28,24 +28,27 @@ func NewKeycloak(baseUrl string, seedData KeycloakData) (*Keycloak, error) {
 	}
 
 	return &Keycloak{
-		Client:    client,
-		AdminJWT:  adminJWT,
-		Ctx:       context.Background(),
-		SeedData:  seedData,
-		UsersJWTs: NewJWTs(),
+		Client:   client,
+		AdminJWT: adminJWT,
+		Ctx:      context.Background(),
+		SeedData: seedData,
 	}, nil
 }
 
 type Keycloak struct {
-	AdminJWT  *gocloak.JWT
-	Client    *gocloak.GoCloak
-	Ctx       context.Context
-	SeedData  KeycloakData
-	UsersJWTs *JWTs
+	AdminJWT *gocloak.JWT
+	Client   *gocloak.GoCloak
+	Ctx      context.Context
+	SeedData *KeycloakData
 }
 
 func (k *Keycloak) Setup() error {
 	err := k.createRealms()
+	if err != nil {
+		return err
+	}
+
+	err = k.createRealmRoles()
 	if err != nil {
 		return err
 	}
@@ -76,7 +79,8 @@ func (k *Keycloak) Teardown() {
 }
 
 func (k *Keycloak) createRealms() error {
-	_, err := k.Client.CreateRealm(k.Ctx, k.AdminJWT.AccessToken, k.SeedData.Realm)
+	realm := k.SeedData.Realm
+	_, err := k.Client.CreateRealm(k.Ctx, k.AdminJWT.AccessToken, realm.RealmRepresentation)
 	if err != nil {
 		return err
 	}
@@ -84,7 +88,7 @@ func (k *Keycloak) createRealms() error {
 }
 
 func (k *Keycloak) createClients() error {
-	_, err := k.Client.CreateClient(k.Ctx, k.AdminJWT.AccessToken, *k.SeedData.Realm.Realm, k.SeedData.Client)
+	_, err := k.Client.CreateClient(k.Ctx, k.AdminJWT.AccessToken, *k.SeedData.Client.RealmName, k.SeedData.Client.Client)
 	if err != nil {
 		return err
 	}
@@ -92,13 +96,27 @@ func (k *Keycloak) createClients() error {
 	return nil
 }
 
-func (k *Keycloak) createUsers() error {
-	for _, user := range k.SeedData.Users {
-		userID, err := k.Client.CreateUser(k.Ctx, k.AdminJWT.AccessToken, *k.SeedData.Realm.Realm, user.User)
+func (k *Keycloak) createRealmRoles() error {
+	realm := k.SeedData.Realm
+	for _, realmRole := range *realm.Roles {
+		_, err := k.Client.CreateRealmRole(k.Ctx, k.AdminJWT.AccessToken, *realm.Realm, realmRole)
 		if err != nil {
 			return err
 		}
-		err = k.Client.SetPassword(k.Ctx, k.AdminJWT.AccessToken, userID, *k.SeedData.Realm.Realm, *user.Password, false)
+	}
+
+	return nil
+}
+
+func (k *Keycloak) createUsers() error {
+	for _, user := range *k.SeedData.Users {
+		userID, err := k.Client.CreateUser(k.Ctx, k.AdminJWT.AccessToken, *user.RealmName, user.User)
+		if err != nil {
+			return err
+		}
+		user.ID = &userID
+
+		err = k.Client.SetPassword(k.Ctx, k.AdminJWT.AccessToken, userID, *user.RealmName, *user.Password, false)
 		if err != nil {
 			return err
 		}
@@ -107,19 +125,19 @@ func (k *Keycloak) createUsers() error {
 }
 
 func (k *Keycloak) generateJWTs() error {
-	for _, user := range k.SeedData.Users {
+	for _, user := range *k.SeedData.Users {
 		jwt, err := k.Client.Login(
 			k.Ctx,
 			*k.SeedData.Client.ClientID,
 			*k.SeedData.Client.Secret,
-			*k.SeedData.Realm.Realm,
+			*user.RealmName,
 			*user.Username,
 			*user.Password,
 		)
 		if err != nil {
 			return err
 		}
-		k.UsersJWTs.Add(*user.Username, *jwt)
+		user.JWT = jwt
 	}
 	return nil
 }

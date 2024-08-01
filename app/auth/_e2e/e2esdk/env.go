@@ -16,7 +16,7 @@ type Env struct {
 func NewEnv(config Config) (*Env, error) {
 	testServer := httptest.NewServer(config.Router)
 	gqlClient := NewGQLClient(testServer.URL)
-	keycloack, err := NewKeycloak(config.KeycloakUrl, config.KeycloakData)
+	keycloak, err := NewKeycloak(config.KeycloakUrl, config.KeycloakData)
 	if err != nil {
 		return nil, err
 	}
@@ -25,7 +25,7 @@ func NewEnv(config Config) (*Env, error) {
 		Router:     config.Router,
 		TestServer: testServer,
 		GQLClient:  gqlClient,
-		Keycloak:   keycloack,
+		Keycloak:   keycloak,
 	}, nil
 }
 
