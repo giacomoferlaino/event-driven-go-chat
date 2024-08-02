@@ -1,8 +1,8 @@
 package e2e
 
 import (
-	"chat/app/auth/_e2e/e2esdk"
 	"chat/app/auth/config"
+	"chat/pkg/test/e2esdk"
 
 	"github.com/Nerzal/gocloak/v13"
 )
