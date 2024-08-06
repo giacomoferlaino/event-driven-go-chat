@@ -1,7 +1,7 @@
 package graph
 
 import (
-	"chat/app/auth/graph/generated"
+	"chat/app/chat/graph/generated"
 	"chat/pkg/api"
 
 	"github.com/99designs/gqlgen/graphql/handler"

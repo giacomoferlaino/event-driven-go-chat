@@ -1,0 +1,8 @@
+query GetMessages {
+  messages {
+    id
+    senderId
+    receiverId
+    text
+  }
+}

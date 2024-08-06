@@ -1,7 +1,6 @@
-package graph
+package api
 
 import (
-	"chat/pkg/api"
 	"chat/pkg/test"
 	"context"
 	"errors"
@@ -19,9 +18,9 @@ func TestErrorPresenter(t *testing.T) {
 				return gqlError
 			})()
 
-			httpError := api.NewHTTPError("test_error", http.StatusInternalServerError, nil)
+			httpError := NewHTTPError("test_error", http.StatusInternalServerError, nil)
 
-			err := errorPresenter(context.Background(), httpError)
+			err := ErrorPresenter(context.Background(), httpError)
 
 			test.AssertEqual(httpError.Message, err.Message, t)
 		})
@@ -36,7 +35,7 @@ func TestErrorPresenter(t *testing.T) {
 
 			genericError := errors.New("not an HTTP error")
 
-			err := errorPresenter(context.Background(), genericError)
+			err := ErrorPresenter(context.Background(), genericError)
 
 			test.AssertEqual("internal_server_error", err.Message, t)
 		})

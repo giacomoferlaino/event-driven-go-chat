@@ -24,12 +24,6 @@ func chatRealmRole() *gocloak.Role {
 
 }
 
-func realmRoles() *[]gocloak.Role {
-	return &[]gocloak.Role{
-		*chatRealmRole(),
-	}
-}
-
 func chatUser() *e2esdk.User {
 	username := "tester"
 	password := "password"
