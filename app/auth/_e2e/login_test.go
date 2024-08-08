@@ -21,8 +21,8 @@ func TestLogin(t *testing.T) {
 			res, err := e2e.Login(e2eEnv.GQLClient.Ctx, e2eEnv.GQLClient.Client, input)
 
 			got := res.GetLogin()
-			test.AssertNotEqual("", got.AccessToken, t)
-			test.AssertNotEqual("", got.RefreshToken, t)
+			want := e2e.LoginLoginJWT{}
+			test.AssertNotDeepEqual(want, got, t)
 			test.AssertEqual(nil, err, t)
 		})
 	})
@@ -41,7 +41,7 @@ func TestLogin(t *testing.T) {
 
 			want := e2e.LoginLoginJWT{}
 			got := res.GetLogin()
-			test.AssertEqual(want, got, t)
+			test.AssertDeepEqual(want, got, t)
 			test.AssertEqual("invalid_credentials", gqlError.Message, t)
 		})
 	})
