@@ -15,5 +15,11 @@
     "text": {
       "type": "string"
     }
-  }
+  },
+  "required": [
+    "_id",
+    "senderId",
+    "receiverId",
+    "text"
+  ]
 }
