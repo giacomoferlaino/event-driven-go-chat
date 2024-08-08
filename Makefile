@@ -3,6 +3,7 @@ local_deployment_file=./deployments/local/docker-compose.yml
 e2e_deployment_file=./deployments/e2e/docker-compose.yml
 auth_app_path=app/auth
 chat_app_path=app/chat
+chat_json_schema_path=${chat_app_path}/jsonschema
 
 # Commands
 local-up: $(local_deployment_file)
@@ -47,3 +48,4 @@ chat-test-e2e:
 chat-codegen:
 	@echo "Generating chat module code"
 	cd $(chat_app_path); go run github.com/99designs/gqlgen generate; go run github.com/Khan/genqlient
+	cd $(chat_json_schema_path); go run github.com/atombender/go-jsonschema -p generated message.json -o generated/message.go

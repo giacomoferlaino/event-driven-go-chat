@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "title": "Chat message",
+  "type": "object",
+  "properties": {
+    "_id": {
+      "type": "string"
+    },
+    "senderId": {
+      "type": "string"
+    },
+    "receiverId": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    }
+  }
+}
