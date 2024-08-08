@@ -7,14 +7,14 @@ import (
 
 func NewKeycloak(IdentityProviderRepository repository.IdentityProvider) Keycloak {
 	return Keycloak{
-		IdentityProviderRepository: IdentityProviderRepository,
+		identityProviderRepository: IdentityProviderRepository,
 	}
 }
 
 type Keycloak struct {
-	IdentityProviderRepository repository.IdentityProvider
+	identityProviderRepository repository.IdentityProvider
 }
 
 func (k Keycloak) Login(username string, password string) (domain.JWT, error) {
-	return k.IdentityProviderRepository.GetJWT(username, password)
+	return k.identityProviderRepository.GetJWT(username, password)
 }

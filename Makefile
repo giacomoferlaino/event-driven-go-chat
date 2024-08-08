@@ -24,7 +24,7 @@ codegen: auth-codegen chat-codegen
 test-unit: auth-test-unit chat-test-unit
 	go test ./pkg/...
 
-test-e2e: auth-test-e2e
+test-e2e: auth-test-e2e chat-test-e2e
 
 test: test-unit test-e2e
 

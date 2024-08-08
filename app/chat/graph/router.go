@@ -11,7 +11,7 @@ import (
 
 func graphHandler() gin.HandlerFunc {
 	rootResolver := &Resolver{
-		diContainer: newDIContainer(),
+		di: newDIContainer(),
 	}
 	handler := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: rootResolver}))
 	handler.SetErrorPresenter(api.ErrorPresenter)

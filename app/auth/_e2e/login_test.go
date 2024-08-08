@@ -3,6 +3,8 @@ package e2e
 import (
 	"chat/app/auth/graph/generated/e2e"
 	"chat/pkg/test"
+	"chat/pkg/test/e2esdk"
+
 	"errors"
 	"testing"
 
@@ -13,8 +15,8 @@ func TestLogin(t *testing.T) {
 	t.Run("if the credentials are valid", func(t *testing.T) {
 		t.Run("it should return the JWT", func(t *testing.T) {
 			input := e2e.UserCredentials{
-				Username: *chatUser().Username,
-				Password: *chatUser().Password,
+				Username: *e2esdk.ChatUser().Username,
+				Password: *e2esdk.ChatUser().Password,
 			}
 			res, err := e2e.Login(e2eEnv.GQLClient.Ctx, e2eEnv.GQLClient.Client, input)
 
