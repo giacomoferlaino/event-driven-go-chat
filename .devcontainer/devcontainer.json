@@ -3,7 +3,7 @@
 {
 	"name": "Docker in Docker",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/go:1-1.22-bookworm",
+	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
 	"appPort": [
 		"8080:8080",
 		"8081:8081"
@@ -15,7 +15,7 @@
 			"moby": "true"
 		},
 		"ghcr.io/devcontainers/features/go:1": {
-			"version": "1.23.0"
+			"version": "1.23"
 		}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
