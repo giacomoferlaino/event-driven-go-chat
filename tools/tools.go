@@ -8,4 +8,5 @@ import (
 	_ "github.com/Khan/genqlient"
 	_ "github.com/atombender/go-jsonschema"
 	_ "github.com/golang-migrate/migrate/v4"
+	_ "golang.org/x/tools/cmd/godoc"
 )

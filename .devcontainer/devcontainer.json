@@ -21,7 +21,7 @@
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "go install golang.org/x/tools/cmd/godoc@latest",
+	// "postCreateCommand": "",
 	"mounts": [
 		"source=./.devcontainer/.bash_aliases,target=/home/vscode/.bash_aliases,type=bind,consistency=cached"
 	],
