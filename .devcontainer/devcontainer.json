@@ -22,6 +22,9 @@
 	// "forwardPorts": [],
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "go install golang.org/x/tools/cmd/godoc@latest",
+	"mounts": [
+		"source=./.devcontainer/.bash_aliases,target=/home/vscode/.bash_aliases,type=bind,consistency=cached"
+	],
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
@@ -31,8 +34,8 @@
 				"esbenp.prettier-vscode"
 			]
 		},
-		"jetbrains" : {
-			"backend" : "GoLand"
+		"jetbrains": {
+			"backend": "GoLand"
 		}
 	}
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
