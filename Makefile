@@ -18,7 +18,7 @@ infra-e2e-up: $(e2e_deployment_file)
 infra-e2e-down: $(e2e_deployment_file)
 	docker compose -f $(e2e_deployment_file) down
 
-infra-e2e-restart: e2e-down e2e-up
+infra-e2e-restart: infra-e2e-down infra-e2e-up
 
 codegen: auth-codegen chat-codegen
 
