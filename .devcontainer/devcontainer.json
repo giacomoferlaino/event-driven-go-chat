@@ -31,7 +31,6 @@
 			"extensions": [
 				"ms-vscode.makefile-tools",
 				"streetsidesoftware.code-spell-checker",
-				"esbenp.prettier-vscode"
 			]
 		},
 		"jetbrains": {
