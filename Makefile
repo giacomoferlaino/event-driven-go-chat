@@ -6,19 +6,19 @@ chat_app_path=app/chat
 chat_json_schema_path=${chat_app_path}/jsonschema
 
 # Commands
-local-up: $(local_deployment_file)
+infra-local-up: $(local_deployment_file)
 	docker compose -f $(local_deployment_file) up -d
 
-local-down: $(local_deployment_file)
+infra-local-down: $(local_deployment_file)
 	docker compose -f $(local_deployment_file) down
 
-e2e-up: $(e2e_deployment_file)
+infra-e2e-up: $(e2e_deployment_file)
 	docker compose -f $(e2e_deployment_file) up -d
 
-e2e-down: $(e2e_deployment_file)
+infra-e2e-down: $(e2e_deployment_file)
 	docker compose -f $(e2e_deployment_file) down
 
-e2e-restart: e2e-down e2e-up
+infra-e2e-restart: e2e-down e2e-up
 
 codegen: auth-codegen chat-codegen
 
