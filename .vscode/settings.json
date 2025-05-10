@@ -1,8 +1,11 @@
 {
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
-  "cSpell.words": [
-    "gocloak",
-    "keycloak"
-  ]
+  "cSpell.words": ["gocloak", "keycloak"],
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
 }
