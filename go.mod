@@ -2,22 +2,28 @@ module chat
 
 go 1.24
 
+tool (
+	github.com/99designs/gqlgen
+	github.com/Khan/genqlient
+	github.com/atombender/go-jsonschema
+	github.com/golang-migrate/migrate/v4
+	golang.org/x/tools/cmd/godoc
+)
+
 require (
 	github.com/99designs/gqlgen v0.17.73
 	github.com/Khan/genqlient v0.8.0
 	github.com/Nerzal/gocloak/v13 v13.9.0
-	github.com/atombender/go-jsonschema v0.16.0
 	github.com/gin-gonic/gin v1.10.0
-	github.com/golang-migrate/migrate/v4 v4.18.3
 	github.com/joho/godotenv v1.5.1
 	github.com/vektah/gqlparser/v2 v2.5.27
-	golang.org/x/tools v0.32.0
 )
 
 require (
 	github.com/agnivade/levenshtein v1.2.1 // indirect
 	github.com/alexflint/go-arg v1.4.2 // indirect
 	github.com/alexflint/go-scalar v1.0.0 // indirect
+	github.com/atombender/go-jsonschema v0.16.0 // indirect
 	github.com/bmatcuk/doublestar/v4 v4.6.1 // indirect
 	github.com/bytedance/sonic v1.13.2 // indirect
 	github.com/bytedance/sonic/loader v0.2.4 // indirect
@@ -34,6 +40,7 @@ require (
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/goccy/go-yaml v1.11.3 // indirect
 	github.com/golang-jwt/jwt/v5 v5.2.2 // indirect
+	github.com/golang-migrate/migrate/v4 v4.18.3 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
@@ -71,6 +78,7 @@ require (
 	golang.org/x/sync v0.14.0 // indirect
 	golang.org/x/sys v0.33.0 // indirect
 	golang.org/x/text v0.25.0 // indirect
+	golang.org/x/tools v0.32.0 // indirect
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028 // indirect
 	google.golang.org/protobuf v1.36.6 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
